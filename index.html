@@ -1,0 +1,57 @@
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PDF CREATOR</title>      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.1.0/mustache.min.js" integrity="sha512-HYiNpwSxYuji84SQbCU5m9kHEsRqwWypXgJMBtbRSumlx1iBB6QaxgEBZHSHEGM+fKyCX/3Kb5V5jeVXm0OglQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+
+    <body onload="renderHTML()">
+        <button type="button" class="btn btn-primary btn-lg" onclick="generatePDF()">Generate PDF</button>
+        <br />
+        <iframe id="target">Loading...</iframe>
+        <script id="template" type="x-tmpl-mustache">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+            <div class="container-fluid">
+                <div id="content"><br />
+                    <table id="table01" class="table table-bordered table_border">                      
+                        <tbody> 
+                            <tr>
+                                <td colspan="2"><b>CONTRACT:</b> <strong class="red">{{ subject }}</strong></td>
+                            </tr>                           
+                            <tr>
+                                <td><b>RESPONSIBLE UNIT:</b> <strong class="red">{{ unit }}</strong></td>
+                                <td><b>CONTRACT NUMBER:</b> {{ contractNumber }}</td>
+                            </tr>
+                        </tbody>                    
+                    </table>
+
+                </div>
+            </div>
+        </script>
+
+        <script>
+
+            var data = {
+                contractId: '',
+                subject: '',
+                unit: '',
+                contractNumber: ''
+            };
+
+            function renderHTML() {
+                var template = document.getElementById('template').innerHTML;
+                var rendered = Mustache.render(template, data);
+
+                const iframe = document.getElementById('target')
+                iframe.contentWindow.document.body.innerHTML = rendered;
+                iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 5}px`;
+            }
+
+            function generatePDF() {    
+                const iframe = document.getElementById('target')            
+                iframe.contentWindow.print();
+            }
+        </script>
+    </body> 
+</html>
